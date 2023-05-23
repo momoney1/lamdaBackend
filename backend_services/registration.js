@@ -1,14 +1,44 @@
 const AWS = require('aws-sdk');
+const express = require('express');
+const mySql = require('mysql');
+
 AWS.config.update({
     region: 'us-east-1'
 })
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-const userTable = 'drink-dish-users';
-const util = require('./Utility/utility');
-const bcrypt = require('bcryptjs');
+
+const db = mySql.createConnection({
+    host: 'aws-drinkdish.ci8ixqjembek.us-east-2.rds.amazonaws.com',
+    user: 'wsadmin',
+    password: 'KMMAG_dddb',
+    database: 'drinkdish'
+})
+db.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+  });
+
+
+const knex = require('knex')({
+    client: 'mysql',
+    connection: {
+      host : '127.0.0.1',
+      port : 3306,
+      user: 'wsadmin',
+      password: 'KMMAG_dddb',
+      database: 'drinkdish'
+    }
+  });
+
+  /*const testKnex = async ()=> {
+    let result = await knex ('Dish').select ('*');
+    console.log ( " hi Moe");
+  }
+
+    testKnex();*/
 
 async function register(userInfo){
+
     const name = userInfo.name;
     const email = userInfo.email;
     const userName = userInfo.userName;
