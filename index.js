@@ -3,6 +3,7 @@ const AWS = require('aws-sdk');
 const mySql = require('mysql');
 const cors = require("cors");
 const bodyParser = require('body-parser');
+
 const registrationService = require('./backend_services/registration');
 const loginService = require('./backend_services/login');
 const validationService = require('./backend_services/validate');
@@ -18,7 +19,7 @@ const verify = 'validate';*/
 var app = express();
 
 app.get('/message', (req, res) => {
-    res.json({ message: "Hello from server!" });
+    res.json({ message: "Hello Mr Moe from server!" });
     console.log('hello Mr Moe from server');
 });
 
@@ -57,7 +58,7 @@ app.listen(4000, () => {
         default:
                 response = util.buildResponse(404, '404 NOT FOUND ERROR');
     }
-};*/
+};
 
 
 //https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest
@@ -89,6 +90,33 @@ const sendRes = (status, body) => {
         body: body
     };
     return response;
+};*/
+
+exports.handler = (event, context, callback) => {
+    console.log("Processing...");
+    console.log("testing Moe's lamda function call");
+    const params = {
+        Item: {
+            date: Date.now(),
+            message: event.key1
+        }
+    };
+    const response = {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify('Hello from new Lambda!'),
+  };
+    
+    docClient.put(params, function(err, data) {
+        if(err){
+            callback(err, null);
+        } else {
+            callback(null, data);
+        }
+    })
 };
 
 
