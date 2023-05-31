@@ -3,11 +3,52 @@ import './App.css';
 import {useState, useEffect} from 'react';
 import React, { Component } from 'react';
 import axios from 'axios';
+import UserRegistration  from './user_registration';
+import UserLogin from './user_login'; 
+import  { UserAccount } from './user_account';
+import Status from './Status';
 
+
+export default function SimpleUseEffect() {
+
+  //https://cors-anywhere-herokuapp.com/https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api
+  
+  /*useEffect(() => {
+    alert("Component Rendered")
+    async function axiosFetch(){
+      await axios.get('http://localhost:4000/message',
+      {headers: {  // place lamda function inside "app.get" in index.js file
+        'Access-Control-Allow-Origin' : '*',
+        'Content-Type': 'application/json'
+     } })
+      .then(res => {
+        console.dir(res.status);
+        console.log("successful call to backend");
+      });
+      
+    }
+
+    axiosFetch();
+
+  });*/
+  
+  return (
+    <div>
+      <b>A Simple use of useEffect...</b>
+      <UserAccount>
+        <UserRegistration/>
+        <UserLogin/>
+        <UserAccount/>
+        <Status/>
+      </UserAccount>
+      
+    </div>
+  )
+}
 
 
 //https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api
-export default class Form extends Component {
+/*export default class Form extends Component {
   //const [message, setMessage] = useState([])
   constructor(props) {
     super(props);
@@ -18,6 +59,23 @@ export default class Form extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
+
+  
+
+axios.get('/user_login', {
+	params: {
+		username: 'john1904',
+	}
+})
+.then(function (response) {
+	console.log(response);
+})
+
+  
+
+  //    await axios.get('https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api/drinkDishTest');
+  //    console.log(response.data + '  finally your call works Mr Moe');
+
 
   handleChange(event) {
 
@@ -31,7 +89,7 @@ export default class Form extends Component {
   async handleSubmit(event) {
     const instance = axios.create(
       {
-              baseURL:'https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api',
+              baseURL:'https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api/drinkDishTest',
               withCredentials: false,
               headers: {
                 'Access-Control-Allow-Origin' : '*',
@@ -72,6 +130,6 @@ export default class Form extends Component {
       </div>
     );
   }
-}
+}*/
 
 
