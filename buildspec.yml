@@ -1,19 +1,18 @@
 version: 0.2
-
+env:
+  variables:
+    INPUT_FILE: "serverless.yml"
+    S3_BUCKET: "DrinkDish/"
 phases:
   install:
+    runtime-versions:
+      nodejs: 10
     commands:
       - npm install
-
   build:
     commands:
-      - npm run build
-
-  post_build:
-    commands:
-      - aws s3 sync build/ s3://amplify-drinkdishapp-dev-30511-deployment
-
+      - aws cloudformation package --template $INPUT_FILE --s3-bucket $S3_BUCKET --output-template buildspec.yaml
 artifacts:
-  files:
-    - '**/*'
-  base-directory: 'build'
+    files:
+        - buildspec.yaml
+        - beta.json
