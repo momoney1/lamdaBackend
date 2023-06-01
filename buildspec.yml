@@ -11,8 +11,8 @@ phases:
       - npm install
   build:
     commands:
-      - aws cloudformation package --template $INPUT_FILE --s3-bucket $S3_BUCKET --output-template buildspec.yaml
+      - aws cloudformation package --template $INPUT_FILE --s3-bucket $S3_BUCKET --output-template buildspec.yml
 artifacts:
     files:
-        - buildspec.yaml
+        - buildspec.yml
         - beta.json
