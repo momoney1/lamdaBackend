@@ -34,6 +34,12 @@ const SearchBar = ({ onSearch }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (searchText === '') {
+      setSearchResults([]);
+    }
+  }, [searchText]);
+
   const renderSearchResult = ({ item }) => (
     <Text>{item.product_name}</Text>
   );
