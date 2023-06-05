@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Dimensions, StyleSheet } from 'react-native';
+import { View, TextInput, Dimensions, StyleSheet, FlatList, Text } from 'react-native';
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
   const [searchBarWidth, setSearchBarWidth] = useState(Dimensions.get('window').width * 0.8);
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async () => {
     try {
       const response = await fetch(`https://world.openfoodfacts.org/api/2/search?search_terms=${searchText}`);
       const data = await response.json();
-      onSearch(data);
+      setSearchResults(data.products);
     } catch (error) {
       console.error('Error searching:', error);
     }
@@ -33,6 +34,10 @@ const SearchBar = ({ onSearch }) => {
     };
   }, []);
 
+  const renderSearchResult = ({ item }) => (
+    <Text>{item.product_name}</Text>
+  );
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -44,6 +49,11 @@ const SearchBar = ({ onSearch }) => {
         value={searchText}
         placeholder="Search by name or ingredients"
         onKeyPress={handleKeyPress}
+      />
+      <FlatList
+        data={searchResults}
+        renderItem={renderSearchResult}
+        keyExtractor={item => item.code}
       />
     </View>
   );
