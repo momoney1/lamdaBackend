@@ -7,7 +7,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(URL);            //insert api here
+      const response = await fetch(`https://world.openfoodfacts.org/api/2/search?search_terms=${searchText}`);
       const data = await response.json();
       onSearch(data);
     } catch (error) {
