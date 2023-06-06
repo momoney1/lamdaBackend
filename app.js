@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Dimensions, StyleSheet, FlatList, Text } from 'react-native';
+import { View, TextInput, Dimensions, StyleSheet, FlatList, Text, TouchableOpacity, Linking } from 'react-native';
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
@@ -40,8 +40,14 @@ const SearchBar = ({ onSearch }) => {
     }
   }, [searchText]);
 
+  const handleResultPress = url => {
+    Linking.openURL(url); // Open the URL in a browser or a new tab
+  };
+
   const renderSearchResult = ({ item }) => (
-    <Text>{item.product_name}</Text>
+    <TouchableOpacity onPress={() => handleResultPress(item.url)}>
+      <Text>{item.product_name}</Text>
+    </TouchableOpacity>
   );
 
   return (
