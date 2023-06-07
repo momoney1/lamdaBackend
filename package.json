@@ -5,7 +5,8 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
-        "aws-sdk": "^2.1381.0",
+        "@aws-sdk/client-lambda": "^3.341.0",
+        "aws-sdk": "^2.1386.0",
         "bcrypt": "^5.1.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.2",
@@ -21,7 +22,8 @@
         "mongoose": "^7.1.0",
         "mysql": "^2.18.1",
         "node-fetch": "^3.3.1",
-        "nodemon": "^2.0.22"
+        "nodemon": "^2.0.22",
+        "serverless-http": "^3.2.0"
     },
     "scripts": {
         "start": "nodemon index.js",

@@ -3,7 +3,6 @@ const AWS = require('aws-sdk');
 const mySql = require('mysql');
 const cors = require("cors");
 const bodyParser = require('body-parser');
-
 const registrationService = require('./backend_services/registration');
 const loginService = require('./backend_services/login');
 const validationService = require('./backend_services/validate');
@@ -12,16 +11,23 @@ const util = require('./backend_services/Utility/utility');
 /*const healthcheck = 'health';
 const userRegistration = 'registration';
 const userLogin = 'login';
-const verify = 'validate';*/
+const verify = 'validate';
+
+*/
 
 //app.use(express.json());
 
 var app = express();
+var mylamda = new AWS.Lambda();
+const { LambdaClient, AddLayerVersionPermissionCommand } = require("@aws-sdk/client-lambda");
+const client = new LambdaClient({ region: "REGION" });
 
-app.get('/message', (req, res) => {
-    res.json({ message: "Hello Mr Moe from server!" });
-    console.log('hello Mr Moe from server');
-});
+
+var params = {
+    FunctonName : 'drinkDishTest',
+    InvocationType: 'RequestResponse',
+    Payload: JSON.stringify({key: 'value'})
+};
 
 app.use(
     cors({
@@ -31,9 +37,19 @@ app.use(
     })
 )
 
+app.get('/message', (req, res) => {
+    res.json({ message: "Hello Mr Moe from server!" });
+    console.log('hello Mr Moe from server');
+    mylamda.invoke(params).promise();
+    console.log('lamda call successfull!');
+});
+
+
+
 app.listen(4000, () => {
     console.log("Moe's new Project on port 4000");
 })
+
 
 /*module.exports   = async function(event) {
     console.log('Request Event:', event);
@@ -92,14 +108,15 @@ const sendRes = (status, body) => {
     return response;
 };*/
 
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context, callback) => {
     console.log("Processing...");
-    console.log("testing Moe's lamda function call");
+    //console.log("here is the first index value in event. "+ event["key1"]);
     const params = {
         Item: {
             date: Date.now(),
             message: event.key1
-        }
+        },
+        TableName: "serverlessApp"
     };
     const response = {
     statusCode: 200,
@@ -107,16 +124,16 @@ exports.handler = (event, context, callback) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify('Hello from new Lambda!'),
+    body: JSON.stringify('Hello from new Lambda! we are good to go'),
   };
-    
-    docClient.put(params, function(err, data) {
+    console.log(response);
+
+};
+
+/* docClient.put(params, function(err, data) {
         if(err){
             callback(err, null);
         } else {
             callback(null, data);
         }
-    })
-};
-
-
+    })*/
