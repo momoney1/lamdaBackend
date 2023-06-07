@@ -8,11 +8,11 @@ import  {AccountContext} from './user_account';
 
 
 const UserLogin = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('empty');
+    const [password, setPassword] = useState('empty');
     const [error, setError] = useState('');
 
-    const { authenticate } = useContext(AccountContext);
+   const authenticate  = useContext(AccountContext);
     //const navigate = useNavigate();
    // const {login} = userAuthentication();
 

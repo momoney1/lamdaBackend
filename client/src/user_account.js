@@ -1,6 +1,5 @@
-import React, {createContext} from 'react'
+import React, {createContext, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-import useState from 'react-router-dom';
 import userPoolInfo from './user_pool';
 import {CognitoUser, AuthenticationDetails} from 'amazon-cognito-identity-js';
 
@@ -62,9 +61,10 @@ import {CognitoUser, AuthenticationDetails} from 'amazon-cognito-identity-js';
             }
 
             return (
-                <AccountContext.Provider value={{ authenticate, getSession, logout}}>
-                    {props.children}
-                </AccountContext.Provider>
+                
+             <div>
+                Hello Moe
+             </div>
             )
         }
     }

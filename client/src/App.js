@@ -1,7 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import {useState, useEffect} from 'react';
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import axios from 'axios';
 import UserRegistration  from './user_registration';
 import UserLogin from './user_login'; 
@@ -35,12 +34,8 @@ export default function SimpleUseEffect() {
   return (
     <div>
       <b>A Simple use of useEffect...</b>
-      <UserAccount>
         <UserRegistration/>
         <UserLogin/>
-        <UserAccount/>
-        <Status/>
-      </UserAccount>
       
     </div>
   )
