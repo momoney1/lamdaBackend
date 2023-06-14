@@ -148,8 +148,6 @@ AWS.config.update({
     console.log(result)
   })
 
-  */
-
   async function selectUser(first_name, last_name){
     const db = await mySql2.createConnection({
         host: 'aws-drinkdish.ci8ixqjembek.us-east-2.rds.amazonaws.com',
@@ -168,8 +166,10 @@ AWS.config.update({
   getUserInfo.then(function(result){
     console.log(result)
   })
-  
 
+  */
+
+  
   
 
   //module.exports.getAlldishes = getAllDishes
@@ -177,20 +177,9 @@ AWS.config.update({
  // module.exports.getAllDrinkIngredients = getAllDrinkIngredients
   //module.exports.getByDrinkCategory = getByDrinkCategory
 
-
-
-  //console.log(flavors)
   
   
 
-
- //const drinkTypes = await db.query("SELECT * FROM Drink_Type")
-
-
-    /*db.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-      });*/
 
 
 
