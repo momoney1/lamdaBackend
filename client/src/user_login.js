@@ -8,24 +8,39 @@ import  {AccountContext} from './user_account';
 
 
 const UserLogin = () => {
-    const [email, setEmail] = useState('empty');
-    const [password, setPassword] = useState('empty');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-   const authenticate  = useContext(AccountContext);
+   //const authenticate  = useContext(AccountContext);
     //const navigate = useNavigate();
    // const {login} = userAuthentication();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setError('');
         
-        authenticate(email, password)
-          .then(data => {
-            console.log('Successfully Logged in', data);
-          }).catch(error => {
-            console.log('Unsuccessful Login attempt', error);
-          })
+        const user = new CognitoUser({
+          UserName: email,
+          Pool: userPoolInfo,
+        });
+
+        const authDetails = new AuthenticationDetails({
+          Username: email,
+          Password: password,
+        });
+
+        user.authenticateUser(authDetails, {
+          onSuccess: (data) => {
+            console.log("onSuccess: ", data);
+          },
+          onFailure: (error) => {
+            console.log("onFailure :", error);
+          },
+          newPasswordRequired: (data) => {
+            console.log("newPasswordRequired: ", data);
+          }
+        })
             
     }
   return (
