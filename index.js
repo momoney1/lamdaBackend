@@ -59,8 +59,6 @@ console.log('connected         from index js');
 
 
 app.get('/v1/Drinks', async (req, res) =>{
-    //res.send(drinks)
-    //res.json({ message: "Drinks retrieved" });
     const sqlQuery = 'SELECT * FROM drinkdish.Drink';
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
@@ -70,8 +68,6 @@ app.get('/v1/Drinks', async (req, res) =>{
 })
 
 app.get('/v1/Dishes', async (req, res) =>{
-    //const dishes = await dbConection.getAllDishes()
-    //res.send(dishes)
     const sqlQuery = 'SELECT * FROM drinkdish.Dish';
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
@@ -81,8 +77,6 @@ app.get('/v1/Dishes', async (req, res) =>{
 })
 
 app.get('/v1/Drink_Flavors', async (req, res) =>{
-    //const flavors = await dbConnection.getAllFlavors()
-    //res.send(flavors)
     const sqlQuery = 'SELECT * FROM drinkdish.Drink_Flavor';
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
@@ -92,8 +86,6 @@ app.get('/v1/Drink_Flavors', async (req, res) =>{
 })
 
 app.get('/v1/Drink_Category', async (req, res) =>{
-    //const drink_category = await dbConnection.getByDrinkCategory()
-    //res.send(drink_category)
     const sqlQuery = 'SELECT * FROM drinkdish.Drink_Category';
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
@@ -111,8 +103,9 @@ app.get('/v1/flavor-pairings', async (req, res) => {
     })
 })
 
-app.get('/v1/drink-for-dish/dish-name', async (req, res) => {
-    const sqlQuery = 'SELECT * FROM drinkdish.Flavor_Pairing';
+app.post('/v1/drink-for-dish', async (req, res) => {
+    const userInput = req.body.dish_name;
+    const sqlQuery = `SELECT * FROM drinkdish.Flavor_Pairing WHERE dish_flavor_id = '${userInput}'`;
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
         console.log(data);
@@ -120,8 +113,9 @@ app.get('/v1/drink-for-dish/dish-name', async (req, res) => {
     })
 })
 
-app.get('/v1/dishes-for-drink/drink-name', (req, res) => {
-    const sqlQuery = 'SELECT * FROM drinkdish.Drink_Flavor_Pairing';
+app.post('/v1/dishes-for-drink', (req, res) => {
+    const userInput = req.body.drink_name;
+    const sqlQuery = `SELECT * FROM drinkdish.Flavor_Pairing WHERE drink_flavor_id = '${userInput}'`;
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
         console.log(data);
