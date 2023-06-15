@@ -4,6 +4,7 @@ import React, { Component, useState, useEffect } from 'react';
 import axios from 'axios';
 import Registration  from './user_registration';
 import UserLogin from './user_login'; 
+import Dashboard from './dashboard';
 import  { UserAccount } from './user_account';
 import Status from './Status';
 //import { BrowserRouter as Router, Route, Navigate } from 'react-router-dom';
@@ -37,6 +38,14 @@ export default function SimpleUseEffect() {
       <Routes>
         <Route path="/user_registration" element={<Registration/>} />
         <Route path="/user_login" element={<UserLogin/>} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route path="/"/>
       </Routes>
     
