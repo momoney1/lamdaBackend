@@ -1,29 +1,37 @@
 import axios from 'axios';
 import {CognitoUser, AuthenticationDetails} from 'amazon-cognito-identity-js';
-import React, {useState, useRef, useContext} from 'react';
-import {Link, useNavigate} from 'react-router-dom'
+import React, { useState } from 'react';
+import {Link, useNavigate, Route, redirect} from 'react-router-dom'
 import userPoolInfo from './user_pool';
+import {Auth} from 'aws-amplify'
 import  {AccountContext} from './user_account'; 
  //import { userAuthentication } from '../Context/authenticationContext';
 
 
-const UserLogin = () => {
+const UserLogin = ({history, location}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-   //const authenticate  = useContext(AccountContext);
-    //const navigate = useNavigate();
-   // const {login} = userAuthentication();
-
-    const handleSubmit = (e) => {
+   
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
+        try {
+          await Auth.signIn(email, password);
+
+          const { from } = location.state || {from: {pathname: '/'}};
+          history.replace(from);
+        } catch( error ) {
+          console.log('Login error: ', error);
+        }
         
-        const user = new CognitoUser({
+        /*const user = new CognitoUser({
           UserName: email,
           Pool: userPoolInfo,
         });
+
 
         const authDetails = new AuthenticationDetails({
           Username: email,
@@ -40,7 +48,7 @@ const UserLogin = () => {
           newPasswordRequired: (data) => {
             console.log("newPasswordRequired: ", data);
           }
-        })
+        })*/
             
     }
   return (

@@ -2,11 +2,13 @@ import logo from './logo.svg';
 import './App.css';
 import React, { Component, useState, useEffect } from 'react';
 import axios from 'axios';
-import UserRegistration  from './user_registration';
+import Registration  from './user_registration';
 import UserLogin from './user_login'; 
 import  { UserAccount } from './user_account';
 import Status from './Status';
-
+//import { BrowserRouter as Router, Route, Navigate } from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom'
+import PrivateRoute from './privateRoute';
 
 export default function SimpleUseEffect() {
 
@@ -32,12 +34,12 @@ export default function SimpleUseEffect() {
   });*/
   
   return (
-    <div>
-      <b>A Simple use of useEffect...</b>
-        <UserRegistration/>
-        <UserLogin/>
-      
-    </div>
+      <Routes>
+        <Route path="/user_registration" element={<Registration/>} />
+        <Route path="/user_login" element={<UserLogin/>} />
+        <Route path="/"/>
+      </Routes>
+    
   )
 }
 

@@ -138,7 +138,6 @@ app.listen(4000, () => {
 
 
 
-
 exports.handler = async (event, context, callback) => {
     console.log("Processing...");
     //console.log("here is the first index value in event. "+ event["key1"]);
