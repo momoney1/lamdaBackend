@@ -7,12 +7,36 @@ import UserLogin from './user_login';
 import Dashboard from './dashboard';
 import  { UserAccount } from './user_account';
 import Status from './Status';
-//import { BrowserRouter as Router, Route, Navigate } from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom'
 import PrivateRoute from './privateRoute';
+import { Amplify, Auth } from 'aws-amplify';
 
-export default function SimpleUseEffect() {
+Amplify.configure({
+  Auth: {
+    region: 'us-east-1',
+    UserPoolId: 'us-east-1_GgidSg7RH',
+    userPoolWebClientId: '7ftmd0ihnjnr497gddf2gon4oj'
+  },
+});
 
+const App = () => {
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      // Check the current user's authentication state
+      await Auth.currentAuthenticatedUser();
+    } catch (error) {
+      // Redirect to the login page if not authenticated
+      // You can use the useNavigate hook or history.push() method to navigate here
+      // For simplicity, assume the login page is '/login'
+      // Example: useNavigate('/login');
+      // Or: history.push('/login');
+    }
+  };
   //https://cors-anywhere-herokuapp.com/https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api
   
   /*useEffect(() => {
@@ -51,6 +75,8 @@ export default function SimpleUseEffect() {
     
   )
 }
+
+export default App;
 
 
 //https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api
