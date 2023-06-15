@@ -79,45 +79,9 @@ const App = () => {
 export default App;
 
 
-//https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api
-/*export default class Form extends Component {
-  //const [message, setMessage] = useState([])
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      message: '',
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
+/*
   
 
-axios.get('/user_login', {
-	params: {
-		username: 'john1904',
-	}
-})
-.then(function (response) {
-	console.log(response);
-})
-
-  
-
-  //    await axios.get('https://7ras193lck.execute-api.us-east-1.amazonaws.com/devTest/api/drinkDishTest');
-  //    console.log(response.data + '  finally your call works Mr Moe');
-
-
-  handleChange(event) {
-
-    const inputValue = event.target.value;
-    const stateField = event.target.name;
-    this.setState({
-      [stateField]: inputValue,
-    });
-    console.log(this.state);
-  }
   async handleSubmit(event) {
     const instance = axios.create(
       {
@@ -137,31 +101,6 @@ axios.get('/user_login', {
     console.log(response.data + '  finally your call works Mr Moe');
   }
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            onChange={this.handleChange}
-            value={this.state.name}
-          />
-
-          <label>Message:</label>
-          <input
-            type="text"
-            name="message"
-            onChange={this.handleChange}
-            value={this.state.message}
-          />
-
-          <button type="submit">Send</button>
-        </form>
-      </div>
-    );
-  }
-}*/
+ */
 
 

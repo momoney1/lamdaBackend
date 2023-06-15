@@ -5,7 +5,6 @@ import {Link, useNavigate, Route, redirect} from 'react-router-dom'
 import userPoolInfo from './user_pool';
 import {Auth} from 'aws-amplify'
 import  {AccountContext} from './user_account'; 
- //import { userAuthentication } from '../Context/authenticationContext';
 
 
 const UserLogin = ({history, location}) => {
@@ -27,28 +26,6 @@ const UserLogin = ({history, location}) => {
           console.log('Login error: ', error);
         }
         
-        /*const user = new CognitoUser({
-          UserName: email,
-          Pool: userPoolInfo,
-        });
-
-
-        const authDetails = new AuthenticationDetails({
-          Username: email,
-          Password: password,
-        });
-
-        user.authenticateUser(authDetails, {
-          onSuccess: (data) => {
-            console.log("onSuccess: ", data);
-          },
-          onFailure: (error) => {
-            console.log("onFailure :", error);
-          },
-          newPasswordRequired: (data) => {
-            console.log("newPasswordRequired: ", data);
-          }
-        })*/
             
     }
   return (
