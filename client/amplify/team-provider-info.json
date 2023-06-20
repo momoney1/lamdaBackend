@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-modrinkdish-dev-20210-authRole",
+      "UnauthRoleArn": "arn:aws:iam::831091994984:role/amplify-modrinkdish-dev-20210-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::831091994984:role/amplify-modrinkdish-dev-20210-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-modrinkdish-dev-20210-deployment",
+      "UnauthRoleName": "amplify-modrinkdish-dev-20210-unauthRole",
+      "StackName": "amplify-modrinkdish-dev-20210",
+      "StackId": "arn:aws:cloudformation:us-east-1:831091994984:stack/amplify-modrinkdish-dev-20210/55d881d0-0c0b-11ee-a138-12549cad2e49",
+      "AmplifyAppId": "d3x9donul6imt"
+    },
+    "categories": {
+      "auth": {
+        "modrinkdish323acb4e": {}
+      }
+    }
+  }
+}

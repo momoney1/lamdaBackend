@@ -5,6 +5,7 @@ import axios from 'axios';
 import Registration  from './user_registration';
 import UserLogin from './user_login'; 
 import Dashboard from './dashboard';
+import SearchBar from './searh_bars';
 import  { UserAccount } from './user_account';
 import Status from './Status';
 import {Routes, Route} from 'react-router-dom'
@@ -61,6 +62,7 @@ const App = () => {
   return (
       <Routes>
         <Route path="/user_registration" element={<Registration/>} />
+        <Route path="/search_bars" element={<SearchBar/>} />
         <Route path="/user_login" element={<UserLogin/>} />
         <Route
           path="/dashboard"

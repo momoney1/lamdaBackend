@@ -6,10 +6,12 @@ const mySql = require('mysql');
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const registrationService = require('./backend_services/mySQLConnect');
-const loginService = require('./backend_services/login');
+//const loginService = require('./backend_services/login');
 const validationService = require('./backend_services/validate');
 const util = require('./backend_services/Utility/utility');
 const dbConection = require('./backend_services/mySQLConnect');
+
+
 
 
 var app = express();
@@ -44,8 +46,7 @@ app.get('/', (req, res) =>{
 app.get('/message', (req, res) => {
     res.json({ message: "Hello Mr Moe from message endpoint!" });
     console.log('hello Mr Moe from server');
-    mylamda.invoke(params).promise();
-    console.log('lamda call successfull!');
+    //mylamda.invoke(params).promise();
 });
 
 const db =  mySql2.createConnection({
@@ -85,8 +86,8 @@ app.get('/v1/Drink_Flavors', async (req, res) =>{
     })
 })
 
-app.get('/v1/Drink_Category', async (req, res) =>{
-    const sqlQuery = 'SELECT * FROM drinkdish.Drink_Category';
+app.get('/v1/Dish_Category', async (req, res) =>{
+    const sqlQuery = 'SELECT * FROM drinkdish.Dish_Category';
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
         console.log(data);
