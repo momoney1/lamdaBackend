@@ -7,7 +7,9 @@ const SearchBar = ({ onSearch }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
   const [pairings, setPairings] = useState([]);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
+  const [dishName, setDishName] = useState('');
+  const [drinkName, setDrinkName] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
 
   const [searchBarWidth, setSearchBarWidth] = useState(null);
@@ -68,11 +70,51 @@ const SearchBar = ({ onSearch }) => {
     }
   };
 
+  const handleDrinksForDishSearch = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/v1/drinks-for-dish', {
+        dish_name: 'your-dish-name', // Replace 'your-dish-name' with the actual dish name
+      });
+      setData(response.data);
+      setIsDataFetched(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleInputChange = (event) => {
+    setDishName(event.target.value);
+  };
+
   const handleKeyPress = event => {
     if (event.key === 'Enter') {
       handleSearch();
     }
   };
+
+  const handleDishesForDrinkSearch = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/v1/dishes-for-drink', {
+        dish_name: 'your-dish-name', // Replace 'your-dish-name' with the actual dish name
+      });
+      setData(response.data);
+      setIsDataFetched(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDrinkInputChange = (event) => {
+    setDrinkName(event.target.value);
+  };
+
+  const handleDrinkKeyPress = event => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  
 
   const handleClearSearch = () => {
     setSearchText('');
@@ -140,6 +182,7 @@ const SearchBar = ({ onSearch }) => {
       <button onClick={handleSearch}>Clear Search</button>
       <div>
       <h1>MySQL Data:</h1>
+      <div>
       <button onClick={handleSearchDrinks}>Fetch All Drinks</button>
       {isDataFetched && (
         <table>
@@ -169,6 +212,8 @@ const SearchBar = ({ onSearch }) => {
           </tbody>
         </table>
       )}
+      </div>
+      <div>
       <button onClick={handleSearchDishes}>Fetch Dishes</button>
       {isDataFetched && (
         <table>
@@ -194,6 +239,8 @@ const SearchBar = ({ onSearch }) => {
           </tbody>
         </table>
       )}
+      </div>
+      <div>
       <button onClick={handleSearchDishCategories}>Fetch Dish Categories</button>
       {isDataFetched && (
         <table>
@@ -213,6 +260,8 @@ const SearchBar = ({ onSearch }) => {
           </tbody>
         </table>
       )}
+      </div>
+      <div>
       <button onClick={handleSearchDrinkFlavors}>Fetch Drink Flavors</button>
       {isDataFetched && (
         <table>
@@ -232,6 +281,69 @@ const SearchBar = ({ onSearch }) => {
           </tbody>
         </table>
       )}
+      </div>
+      <div>
+      <input
+        type="text"
+        value={dishName}
+        onChange={handleInputChange}
+        placeholder="Enter Dish ID"
+      />
+      <button onClick={handleDrinksForDishSearch}>Fetch Complimentary Drinks</button>
+      {isDataFetched && (
+        <table>
+          <thead>
+            <tr>
+              <th>Column 1</th>
+              <th>Column 2</th>
+              <th>Column 3</th>
+              {/* Add more table headers as needed */}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(item => (
+              <tr key={item.id}>
+                <td>{item.column1}</td>
+                <td>{item.column2}</td>
+                <td>{item.column3}</td>
+                {/* Display more columns as needed */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      </div>
+      <div>
+      <input
+        type="text"
+        value={drinkName}
+        onChange={handleDrinkInputChange}
+        placeholder="Enter Drink ID"
+      />
+      <button onClick={handleDishesForDrinkSearch}>Fetch Complimentary Dishes</button>
+      {isDataFetched && (
+        <table>
+          <thead>
+            <tr>
+              <th>Column 1</th>
+              <th>Column 2</th>
+              <th>Column 3</th>
+              {/* Add more table headers as needed */}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(item => (
+              <tr key={item.id}>
+                <td>{item.column1}</td>
+                <td>{item.column2}</td>
+                <td>{item.column3}</td>
+                {/* Display more columns as needed */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      </div>
     </div>
     </div>
   );

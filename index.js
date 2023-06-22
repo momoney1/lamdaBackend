@@ -39,6 +39,9 @@ app.use((err, req, res, next) => {
     res.status(500).send('Internal Server Error!')
 })
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get('/', (req, res) =>{
     res.json({ message: "Hello Mr Moe from backend entrypoint!" });
 })
@@ -104,7 +107,7 @@ app.get('/v1/flavor-pairings', async (req, res) => {
     })
 })
 
-app.post('/v1/drink-for-dish', async (req, res) => {
+app.post('/v1/drinks-for-dish', async (req, res) => {
     const userInput = req.body.dish_name;
     const sqlQuery = `SELECT * FROM drinkdish.Flavor_Pairing WHERE dish_flavor_id = '${userInput}'`;
     db.query(sqlQuery, (err, data) =>{
