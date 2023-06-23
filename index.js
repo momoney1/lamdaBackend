@@ -61,6 +61,49 @@ const db =  mySql2.createConnection({
 })
 console.log('connected         from index js');
 
+app.post('/register', (req, res) => {
+    const { username, password } = req.body;
+  
+    // Validate the request body
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Username and password are required' });
+    }
+  
+    // Insert the user into the database
+    const query = 'INSERT INTO User (username, password) VALUES (?, ?)';
+    db.query(query, [username, password], (error, results) => {
+      if (error) {
+        console.error('Error registering user: ', error);
+        return res.status(500).json({ message: 'Error registering user' });
+      }
+      return res.status(201).json({ message: 'User registered successfully' });
+    });
+  });
+
+  app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    // Validate the request body
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Username and password are required' });
+    }
+  
+    // Check if the username and password match the records in the database
+    const query = 'SELECT * FROM User WHERE username = ? AND password = ?';
+    db.query(query, [username, password], (error, results) => {
+      if (error) {
+        console.error('Error logging in: ', error);
+        return res.status(500).json({ message: 'Error logging in' });
+      }
+  
+      if (results.length === 0) {
+        return res.status(401).json({ message: 'Incorrect username or password' });
+      }
+  
+      return res.status(200).json({ message: 'Login successful' });
+    });
+  });
+
 
 app.get('/v1/Drinks', async (req, res) =>{
     const sqlQuery = 'SELECT * FROM drinkdish.Drink';
