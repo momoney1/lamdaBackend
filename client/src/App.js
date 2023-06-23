@@ -11,6 +11,11 @@ import Status from './Status';
 import {Routes, Route } from 'react-router-dom'
 import PrivateRoute from './privateRoute';
 import { Amplify, Auth } from 'aws-amplify';
+import {Link, useNavigate, redirect, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router} from 'react-router-dom';
+import  Switch from 'react-router'
+
+
 
 /*Amplify.configure({
   Auth: {
@@ -41,6 +46,7 @@ const App = () => {
   };
  */
   const App = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
   
@@ -60,6 +66,7 @@ const App = () => {
         await axios.post('http://localhost:4000/login', { username, password });
         console.log('Login successful');
         // Handle success, e.g., store authentication token or redirect to dashboard
+        navigate('/search_bars');
       } catch (error) {
         console.error('Error logging in: ', error);
         // Handle error,
@@ -69,32 +76,37 @@ const App = () => {
   return (
       
     <div>
-    <h1>User Registration</h1>
-    <form>
-      <label htmlFor="username">Username:</label>
-      <input
-        type="text"
-        id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+      <h1>User Registration and Login</h1>
+      <form>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-      <label htmlFor="password">Password:</label>
-      <input
-        type="password"
-        id="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button type="button" onClick={handleRegister}>
-        Register
-      </button>
-      <button type="button" onClick={handleLogin}>
-        Login
-      </button>
-    </form>
-  </div>
+        <button type="button" onClick={handleRegister}>
+          Register
+        </button>
+        <button type="button" onClick={handleLogin}>
+          Login
+        </button>
+      </form>
+
+        <Routes>
+          <Route path="/search_bars" element={<SearchBar />} />
+        </Routes>
+    </div>
+  
 
   )
 }
