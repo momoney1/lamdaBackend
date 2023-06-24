@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
-
+import './search_bars.css';
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
@@ -11,8 +11,9 @@ const SearchBar = ({ onSearch }) => {
   const [dishName, setDishName] = useState('');
   const [drinkName, setDrinkName] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
-
   const [searchBarWidth, setSearchBarWidth] = useState(null);
+  const [selectedTable, setSelectedTable] = useState(null);
+
 
 
   const handleSearch = async () => {
@@ -32,6 +33,7 @@ const SearchBar = ({ onSearch }) => {
       console.log(response.data)
       setData(response.data);
       setIsDataFetched(true);
+      setSelectedTable('drinks'); // Select the 'drinks' table
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -43,6 +45,8 @@ const SearchBar = ({ onSearch }) => {
       console.log('backend call works just fine now')
       setData(response.data);
       setIsDataFetched(true);
+      setSelectedTable('drinks'); // Select the 'drinks' table
+      setSelectedTable('dishes'); // Select the 'dishes' table
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -54,6 +58,7 @@ const SearchBar = ({ onSearch }) => {
       console.log('backend call works just fine now')
       setData(response.data);
       setIsDataFetched(true)
+      setSelectedTable('drinkFlavors'); // Select the 'drinkFlavors' table
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -65,6 +70,7 @@ const SearchBar = ({ onSearch }) => {
       console.log('backend call works just fine now')
       setData(response.data);
       setIsDataFetched(true)
+      setSelectedTable('dishCategories'); // Select the 'dishCategories' table
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -77,6 +83,7 @@ const SearchBar = ({ onSearch }) => {
       });
       setData(response.data);
       setIsDataFetched(true);
+      setSelectedTable('dishDrinksForDish'); 
     } catch (error) {
       console.error(error);
     }
@@ -99,6 +106,8 @@ const SearchBar = ({ onSearch }) => {
       });
       setData(response.data);
       setIsDataFetched(true);
+      setSelectedTable('dishesForDrink');
+
     } catch (error) {
       console.error(error);
     }
@@ -115,7 +124,6 @@ const SearchBar = ({ onSearch }) => {
   };
 
   
-
   const handleClearSearch = () => {
     setSearchText('');
     setSearchResults([]);
@@ -150,13 +158,6 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div className="search-bar">
-      <input
-        type="text"
-        value={searchText}
-        onChange={e => setSearchText(e.target.value)}
-        placeholder="Search by name or ingredients"
-        onKeyPress={handleKeyPress}
-      />
       <ul>
         {searchResults.map(result => (
           <li key={result.code} onClick={() => handleResultPress(result)}>
@@ -179,12 +180,11 @@ const SearchBar = ({ onSearch }) => {
           )}
         </div>
       )}
-      <button onClick={handleSearch}>Clear Search</button>
       <div>
       <h1>MySQL Data:</h1>
       <div>
       <button onClick={handleSearchDrinks}>Fetch All Drinks</button>
-      {isDataFetched && (
+      {isDataFetched && selectedTable === 'drinks'&&(
         <table>
           <thead>
             <tr>
@@ -215,7 +215,7 @@ const SearchBar = ({ onSearch }) => {
       </div>
       <div>
       <button onClick={handleSearchDishes}>Fetch Dishes</button>
-      {isDataFetched && (
+      {isDataFetched && selectedTable === 'dishes'&&(
         <table>
           <thead>
             <tr>
@@ -242,7 +242,7 @@ const SearchBar = ({ onSearch }) => {
       </div>
       <div>
       <button onClick={handleSearchDishCategories}>Fetch Dish Categories</button>
-      {isDataFetched && (
+      {isDataFetched && selectedTable === 'dishCategories' && (
         <table>
           <thead>
             <tr>
@@ -263,7 +263,7 @@ const SearchBar = ({ onSearch }) => {
       </div>
       <div>
       <button onClick={handleSearchDrinkFlavors}>Fetch Drink Flavors</button>
-      {isDataFetched && (
+      {isDataFetched && selectedTable === 'drinkFlavors' && (
         <table>
           <thead>
             <tr>
@@ -290,7 +290,7 @@ const SearchBar = ({ onSearch }) => {
         placeholder="Enter Dish ID"
       />
       <button onClick={handleDrinksForDishSearch}>Fetch Complimentary Drinks</button>
-      {isDataFetched && (
+      {isDataFetched && selectedTable === 'drinksForDish' && (
         <table>
           <thead>
             <tr>
@@ -321,7 +321,7 @@ const SearchBar = ({ onSearch }) => {
         placeholder="Enter Drink ID"
       />
       <button onClick={handleDishesForDrinkSearch}>Fetch Complimentary Dishes</button>
-      {isDataFetched && (
+      {isDataFetched && selectedTable === 'dishesForDrink' && (
         <table>
           <thead>
             <tr>

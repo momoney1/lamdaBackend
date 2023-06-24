@@ -6,6 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
 import { Amplify, Auth } from 'aws-amplify';
 import awsconfig from './aws-exports';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import SearchBar from './searh_bars';
+
+
 Amplify.configure(awsconfig);
 
 
@@ -13,7 +17,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Routes>
+        <Route path="/" element={ <App/> }>
+        <Route path="/search_bars" element={<SearchBar/>} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   </React.StrictMode>
 );

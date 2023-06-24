@@ -64,7 +64,7 @@ const App = () => {
     };
   
     return (
-      <form onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
           type="text"
@@ -88,6 +88,8 @@ const App = () => {
   const App = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const location = useLocation();
+
   
   
     const handleRegister = async (username, password) => {
@@ -117,14 +119,18 @@ const App = () => {
   return (
       
     <div>
-      <h1>User Registration and Login</h1>
+          {location.pathname !== '/search_bars' && (
+      <h1 className="App-header">User Registration and Login</h1>
+    )}
       {!isLoggedIn ? (
         <LoginForm handleRegister={handleRegister} handleLogin={handleLogin} />
       ) : (
-        
+        <div>
           <Routes>
-            <Route path="/search_bars" element={<SearchBar />} />
+            <Route path="/search_bars" element={<SearchBar/>} />
           </Routes>
+        </div>
+          
         
       )}
     </div>
