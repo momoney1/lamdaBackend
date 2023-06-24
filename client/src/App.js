@@ -45,12 +45,52 @@ const App = () => {
     }
   };
  */
-  const App = () => {
-    const navigate = useNavigate();
+  const LoginForm = ({ handleRegister, handleLogin}) => {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const handleUsernameChange = (e) => {
+      setUsername(e.target.value);
+    };
   
-    const handleRegister = async () => {
+    const handlePasswordChange = (e) => {
+      setPassword(e.target.value);
+    };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      handleLogin(username, password);
+    };
+  
+    return (
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={handleUsernameChange}
+        />
+  
+        <label htmlFor="password">Password:</label>
+        <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+        />
+              <button type="submit">Login</button>
+      </form>
+    );
+  };
+
+  const App = () => {
+    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  
+    const handleRegister = async (username, password) => {
       try {
         await axios.post('http://localhost:4000/register', { username, password });
         console.log('User registered successfully');
@@ -61,9 +101,10 @@ const App = () => {
       }
     };
   
-    const handleLogin = async () => {
+    const handleLogin = async (username, password) => {
       try {
         await axios.post('http://localhost:4000/login', { username, password });
+        setIsLoggedIn(true);
         console.log('Login successful');
         // Handle success, e.g., store authentication token or redirect to dashboard
         navigate('/search_bars');
@@ -76,36 +117,17 @@ const App = () => {
   return (
       
     <div>
-      <h1>User Registration and Login</h1>
-      <form>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button type="button" onClick={handleRegister}>
-          Register
-        </button>
-        <button type="button" onClick={handleLogin}>
-          Login
-        </button>
-      </form>
-
-        <Routes>
-          <Route path="/search_bars" element={<SearchBar />} />
-        </Routes>
-    </div>
+    <h1>User Registration and Login</h1>
+    {!isLoggedIn && (
+      <LoginForm
+        handleRegister={handleRegister}
+        handleLogin={handleLogin}
+      />
+    )}
+      <Routes>
+        <Route path="/search_bars" element={<SearchBar />} />
+      </Routes>
+  </div>
   
 
   )
