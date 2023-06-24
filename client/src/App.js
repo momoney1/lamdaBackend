@@ -117,17 +117,17 @@ const App = () => {
   return (
       
     <div>
-    <h1>User Registration and Login</h1>
-    {!isLoggedIn && (
-      <LoginForm
-        handleRegister={handleRegister}
-        handleLogin={handleLogin}
-      />
-    )}
-      <Routes>
-        <Route path="/search_bars" element={<SearchBar />} />
-      </Routes>
-  </div>
+      <h1>User Registration and Login</h1>
+      {!isLoggedIn ? (
+        <LoginForm handleRegister={handleRegister} handleLogin={handleLogin} />
+      ) : (
+        
+          <Routes>
+            <Route path="/search_bars" element={<SearchBar />} />
+          </Routes>
+        
+      )}
+    </div>
   
 
   )
