@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import './search_bars.css';
+import logo from './DrinkDishLogo.png';
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
@@ -181,7 +182,7 @@ const SearchBar = ({ onSearch }) => {
         </div>
       )}
       <div>
-      <h1>MySQL Data:</h1>
+      <h1>Home</h1>
       <div>
       <button onClick={handleSearchDrinks}>Fetch All Drinks</button>
       {isDataFetched && selectedTable === 'drinks'&&(
@@ -343,6 +344,10 @@ const SearchBar = ({ onSearch }) => {
           </tbody>
         </table>
       )}
+       <div className="logo-container">
+      <img src={logo} alt="Logo" />
+      {/* The rest of your React components */}
+    </div>
       </div>
     </div>
     </div>

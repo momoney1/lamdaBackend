@@ -32,10 +32,11 @@
   button {
     padding: 8px 16px;
     margin-bottom: 8px;
-    background-color: #ff6600;
+    background-color: #FE0000;
+    ;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 100px;
     cursor: pointer;
   }
   
@@ -64,10 +65,22 @@
   }
   
   h1 {
-    font-size: 24px;
-    margin-bottom: 16px;
+    font-size: 40px;
+    margin-bottom: px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
   }
   
   p {
     margin-bottom: 8px;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px; /* Adjust the height as needed */
+    width: 300px; /* Adjust the width as needed */
+    margin: 0 auto;
   }

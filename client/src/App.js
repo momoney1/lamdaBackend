@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { Component, useState, useEffect } from 'react';
 import axios from 'axios';
@@ -14,6 +13,7 @@ import { Amplify, Auth } from 'aws-amplify';
 import {Link, useNavigate, redirect, useLocation } from 'react-router-dom'
 import { BrowserRouter as Router} from 'react-router-dom';
 import  Switch from 'react-router'
+import logo from './DrinkDishLogo.png';
 
 
 
@@ -120,19 +120,23 @@ const App = () => {
       
     <div>
           {location.pathname !== '/search_bars' && (
-      <h1 className="App-header">User Registration and Login</h1>
+      <h1 className="App-header">DrinkDish</h1>
     )}
       {!isLoggedIn ? (
-        <LoginForm handleRegister={handleRegister} handleLogin={handleLogin} />
-      ) : (
-        <div>
-          <Routes>
-            <Route path="/search_bars" element={<SearchBar/>} />
-          </Routes>
-        </div>
-          
-        
-      )}
+  <div>
+    <LoginForm handleRegister={handleRegister} handleLogin={handleLogin} />
+    <div className="logo-container">
+      <img src={logo} alt="Logo" />
+      {/* The rest of your React components */}
+    </div>
+  </div>
+) : (
+  <div>
+    <Routes>
+      <Route path="/search_bars" element={<SearchBar />} />
+    </Routes>
+  </div>
+)}
     </div>
   
 
