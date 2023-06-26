@@ -7,11 +7,10 @@ import Dashboard from './dashboard';
 import SearchBar from './searh_bars';
 import  { UserAccount } from './user_account';
 import Status from './Status';
-import {Routes, Route } from 'react-router-dom'
 import PrivateRoute from './privateRoute';
 import { Amplify, Auth } from 'aws-amplify';
 import {Link, useNavigate, redirect, useLocation } from 'react-router-dom'
-import { BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import  Switch from 'react-router'
 import logo from './DrinkDishLogo.png';
 
