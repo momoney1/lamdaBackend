@@ -1231,3 +1231,96 @@ describe('handleSearchDrinks', () => {
       expect(setSelectedTable).not.toHaveBeenCalled();
     });
   });
+
+
+
+  const mockedFlavors = {
+    data: [
+      { id: 1, name: 'intense' },
+      { id: 2, name: 'Bold' },
+      { id: 3, name: 'frothy' },
+      { id: 4, name: 'Creamy' },
+      { id: 5, name: 'Smooth' },
+      { id: 6, name: 'chocolatey' },
+      { id: 7, name: 'Rich' },
+      { id: 8, name: 'Earthly' },
+      { id: 9, name: 'flavorful' },
+      { id: 10, name: 'Spiced' },
+      { id: 11, name: 'citrusy' },
+      { id: 12, name: 'Tangy' },
+      { id: 13, name: 'refreshing' },
+      { id: 14, name: 'Cool' },
+      { id: 15, name: 'vibrant' },
+      { id: 16, name: 'fruity' },
+      { id: 17, name: 'Crisp' },
+      { id: 18, name: 'tropical' },
+      { id: 19, name: 'revitalizing' },
+      { id: 20, name: 'fizzy' },
+      { id: 21, name: 'Spicy' },
+      { id: 22, name: 'bubbly' },
+      { id: 23, name: 'Tart' },
+      { id: 24, name: 'zesty' },
+      { id: 25, name: 'Minty' },
+      { id: 26, name: 'berry-infused' },
+      { id: 27, name: 'Cooling' },
+      { id: 28, name: 'Nutrient-rich' },
+      { id: 29, name: 'Floral' },
+      { id: 30, name: 'bourbon-infused' },
+      { id: 31, name: 'indulgent' },
+      { id: 32, name: 'complex' },
+      { id: 33, name: 'Bitter' },
+      { id: 34, name: 'savory' },
+      { id: 35, name: 'sophisticated' },
+      { id: 36, name: 'Timeless' },
+      { id: 37, name: 'sweet' },
+      { id: 38, name: 'robust' },
+      { id: 39, name: 'stimulating' },
+      { id: 40, name: 'Energizing' },
+      { id: 41, name: 'vanilla-infused' },
+    ],
+  }
+
+  const handleSearchDrinkFlavors = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/v1/Drink_Flavors');
+      console.log('backend call works just fine now')
+      setData(response.data);
+      setIsDataFetched(true)
+      setSelectedTable('drinkFlavors'); // Select the 'drinkFlavors' table
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  describe('handleSearchDrinkFlavors', () => {
+    it('should fetch data and set the state correctly', async () => {
+
+      const mockGet = jest.fn().mockResolvedValue({ data: { mockedFlavors } });
+      axios.get = mockGet;
+
+      
+     // axios.get = jest.fn().mockResolvedValue(mockedResponse);
+  
+      const setData = jest.fn();
+      const setIsDataFetched = jest.fn();
+      const setSelectedTable = jest.fn();
+  
+      await handleSearchDrinkFlavors(setData, setIsDataFetched, setSelectedTable);
+  
+      expect(axios.get).toHaveBeenCalledWith('http://localhost:4000/v1/Drink_Flavors');
+      /*expect(setData).toHaveBeenCalledWith(mockedResponse.data);
+      expect(setIsDataFetched).toHaveBeenCalledWith(true);
+      expect(setSelectedTable).toHaveBeenCalledWith('drinkFlavors'); */
+    });
+  
+    it('should handle errors correctly', async () => {
+      const errorMessage = 'Error fetching data';
+      axios.get = jest.fn().mockRejectedValue(new Error(errorMessage));
+  
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+  
+      await handleSearchDrinkFlavors();
+  
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching data:', new Error(errorMessage));
+    });
+  });
