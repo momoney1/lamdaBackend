@@ -52,8 +52,6 @@ const SearchBar = ({ onSearch }) => {
       const drink = response.data[0].drink_name;
       console.log(drink.toString() + " is the searched drink");
       setDrink(drink.toString());
-      //setIsDataFetched(true);
-      //setSelectedTable('drinks'); // Select the 'drinks' table
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -411,7 +409,7 @@ const SearchBar = ({ onSearch }) => {
           </tbody>
         </table>
       )}
-      <div>
+      <div className="input-section">
       <input
         type="text"
         value={drinkName} 
@@ -421,7 +419,7 @@ const SearchBar = ({ onSearch }) => {
       <button onClick={handleSearchDrinkByName}>Search</button>
       <p>Drink: {drink}</p>
     </div>
-    <div>
+    <div className="input-section">
       <form onSubmit={handleFetchByDrinkIngredient}>
         <input
           type="text"

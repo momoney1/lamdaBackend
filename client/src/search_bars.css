@@ -76,6 +76,10 @@
     margin-bottom: 8px;
   }
 
+  .input-section {
+    margin-bottom: 20px; /* Add margin-bottom to create spacing between elements */
+  }
+
   .logo-container {
     display: flex;
     justify-content: center;
