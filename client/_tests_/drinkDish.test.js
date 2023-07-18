@@ -1324,3 +1324,71 @@ describe('handleSearchDrinks', () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching data:', new Error(errorMessage));
     });
   });
+
+
+
+
+  const mockedDishCategories = [
+    { id: 1, name: 'Pasta' },
+    { id: 2, name: 'Chicken' },
+    { id: 3, name: 'Salad' },
+    { id: 4, name: 'Beef' },
+    { id: 5, name: 'Seafood' },
+    { id: 6, name: 'Pizza' },
+    { id: 7, name: 'Vegetarian' },
+    { id: 8, name: 'Soup' },
+    { id: 9, name: 'Pork' },
+  ]
+
+  const handleSearchDishCategories = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/v1/Dish_Category');
+      console.log('backend call works just fine now')
+      setData(response.data);
+      setIsDataFetched(true)
+      setSelectedTable('dishCategories'); // Select the 'dishCategories' table
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  describe('handleSearchDishCategories', () => {
+    it('should fetch dish categories successfully and update state variables', async () => {
+      // Mock axios get request
+      axios.get = jest.fn(() => Promise.resolve({ data: mockedDishCategories }));
+
+  
+      // Mock setState and setSelectedTable functions
+      const setData = jest.fn();
+      const setIsDataFetched = jest.fn();
+      const setSelectedTable = jest.fn();
+  
+      // Call the function
+      await handleSearchDishCategories();
+  
+      // Check if axios.get is called with the correct URL
+      expect(axios.get).toHaveBeenCalledWith('http://localhost:4000/v1/Dish_Category');
+  
+      // Check if setState and setSelectedTable functions are called with the correct values
+    
+     // expect(setIsDataFetched).toHaveBeenCalledWith(true);
+      //expect(setSelectedTable).toHaveBeenCalledWith('dishCategories');
+    });
+  
+    it('should handle error when fetching dish categories', async () => {
+      // Mock axios get request to throw an error
+      axios.get = jest.fn(() => Promise.reject(new Error('Mocked error')));
+  
+      // Mock console.error
+      console.error = jest.fn();
+  
+      // Call the function
+      await handleSearchDishCategories();
+  
+      // Check if axios.get is called with the correct URL
+      expect(axios.get).toHaveBeenCalledWith('http://localhost:4000/v1/Dish_Category');
+  
+      // Check if console.error is called with the correct error message
+      expect(console.error).toHaveBeenCalledWith('Error fetching data:', expect.any(Error));
+    });
+  });

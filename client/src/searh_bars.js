@@ -9,8 +9,13 @@ const SearchBar = ({ onSearch }) => {
   const [selectedResult, setSelectedResult] = useState(null);
   const [pairings, setPairings] = useState([]);
   const [data, setData] = useState([]);
-  const [dishName, setDishName] = useState('');
-  const [drinkName, setDrinkName] = useState('');
+  const [dishId, setDishId] = useState('');
+  const [drinkId, setDrinkId] = useState('');
+  const [dishName, setDishName] = useState('');  //dishId, setDishid
+  const [drinkName, setDrinkName] = useState(''); //drinkId, setDrinkId
+  const [drink, setDrink] = useState('');
+  const [drinkIngredientName, setDrinkIngredientName] = useState('');
+  const [flavorPairings, setFlavorPairings] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [searchBarWidth, setSearchBarWidth] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
@@ -40,14 +45,39 @@ const SearchBar = ({ onSearch }) => {
     }
   };
 
+ 
+  const handleSearchDrinkByName = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
+      const drink = response.data[0].drink_name;
+      console.log(drink.toString() + " is the searched drink");
+      setDrink(drink.toString());
+      //setIsDataFetched(true);
+      //setSelectedTable('drinks'); // Select the 'drinks' table
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   const handleSearchDishes = async () => {
     try {
       const response = await axios.get('http://localhost:4000/v1/Dishes');
       console.log('backend call works just fine now')
       setData(response.data);
       setIsDataFetched(true);
-      setSelectedTable('drinks'); // Select the 'drinks' table
       setSelectedTable('dishes'); // Select the 'dishes' table
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const handleSearchByDishName = async (searchTerm) => {
+    try {
+      const response = await axios.get(`http://localhost:4000/v1/Dish-Name?search=${searchTerm}`);
+      console.log('backend call works just fine now')
+      setData(response.data);
+      setIsDataFetched(true);
+      setSelectedTable('dish-name'); // Select the 'dishes' table
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -82,6 +112,21 @@ const SearchBar = ({ onSearch }) => {
       const response = await axios.post('http://localhost:4000/v1/drinks-for-dish', {
         dish_name: 'your-dish-name', // Replace 'your-dish-name' with the actual dish name
       });
+      console.log('drinks for dish works');
+      setData(response.data);
+      setIsDataFetched(true);
+      setSelectedTable('dishDrinksForDish'); 
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleByDrinkIngredient = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/v1/drinks-for-dish', {
+        drink_ingredient: 'your-drink-ingredient', // Replace 'your-dish-name' with the actual dish name
+      });
+      console.log('drinks for dish works');
       setData(response.data);
       setIsDataFetched(true);
       setSelectedTable('dishDrinksForDish'); 
@@ -91,7 +136,10 @@ const SearchBar = ({ onSearch }) => {
   };
 
   const handleInputChange = (event) => {
-    setDishName(event.target.value);
+    setDishName(event.target.value);  //setDishId
+  };
+  const handleDishInputChange = (event) => {
+    setDishId(event.target.value);  //setDishId
   };
 
   const handleKeyPress = event => {
@@ -103,7 +151,7 @@ const SearchBar = ({ onSearch }) => {
   const handleDishesForDrinkSearch = async () => {
     try {
       const response = await axios.post('http://localhost:4000/v1/dishes-for-drink', {
-        dish_name: 'your-dish-name', // Replace 'your-dish-name' with the actual dish name
+        drink_name: 'your-dish-name', // Replace 'your-dish-name' with the actual dish name
       });
       setData(response.data);
       setIsDataFetched(true);
@@ -113,10 +161,17 @@ const SearchBar = ({ onSearch }) => {
       console.error(error);
     }
   };
+ 
 
   const handleDrinkInputChange = (event) => {
-    setDrinkName(event.target.value);
+    setDrinkId(event.target.value);  //setDrinkId
   };
+  
+  const handleDrinkNameInputChange = (event) => {
+    setDrinkName(event.target.value); 
+    //console.log(drinkName + " is the name of target value");
+  };
+
 
   const handleDrinkKeyPress = event => {
     if (event.key === 'Enter') {
@@ -154,6 +209,18 @@ const SearchBar = ({ onSearch }) => {
       setPairings(extractedPairings);
     } catch (error) {
       console.error('Error fetching pairings:', error);
+    }
+  };
+
+  const handleFetchByDrinkIngredient = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/v1/match-drink-ingredient', { drink_ingredient_name: drinkIngredientName });
+      const data = response.data;
+      setFlavorPairings(data);
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching flavor pairings:', error);
     }
   };
 
@@ -286,8 +353,8 @@ const SearchBar = ({ onSearch }) => {
       <div>
       <input
         type="text"
-        value={dishName}
-        onChange={handleInputChange}
+        value={dishId} //dishId
+        onChange={handleDishInputChange}
         placeholder="Enter Dish ID"
       />
       <button onClick={handleDrinksForDishSearch}>Fetch Complimentary Drinks</button>
@@ -317,7 +384,7 @@ const SearchBar = ({ onSearch }) => {
       <div>
       <input
         type="text"
-        value={drinkName}
+        value={drinkId} //drinkID
         onChange={handleDrinkInputChange}
         placeholder="Enter Drink ID"
       />
@@ -344,11 +411,39 @@ const SearchBar = ({ onSearch }) => {
           </tbody>
         </table>
       )}
+      <div>
+      <input
+        type="text"
+        value={drinkName} 
+        onChange={handleDrinkNameInputChange}
+        placeholder="Enter Drink Name"
+      />
+      <button onClick={handleSearchDrinkByName}>Search</button>
+      <p>Drink: {drink}</p>
+    </div>
+    <div>
+      <form onSubmit={handleFetchByDrinkIngredient}>
+        <input
+          type="text"
+          value={drinkIngredientName}
+          onChange={(e) => setDrinkIngredientName(e.target.value)}
+          placeholder="Enter Drink Ingredient Name"
+        />
+        <button type="submit">Search by Drink Ingredient</button>
+      </form>
+      <ul>
+        {flavorPairings.map((pairing) => (
+          <li key={pairing.flavor_pairing_id}>
+            Drink Ingredient Name: {pairing.drink_ingredient_name}, Dish Ingredient Name: {pairing.dish_ingredient_name}
+          </li>
+        ))}
+      </ul>
+    </div>
        <div className="logo-container">
       <img src={logo} alt="Logo" />
       {/* The rest of your React components */}
     </div>
-      </div>
+    </div>
     </div>
     </div>
   );
