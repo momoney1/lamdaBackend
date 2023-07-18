@@ -121,7 +121,6 @@ app.post('/v1/Drink-Name', (req, res) => {
         if(err) return res.json('Error try again');
         console.log(req.body.drinkName, " backend data body");
         console.log('Returned data:', data);
-
         return res.json(data);
     })
 })
@@ -136,7 +135,8 @@ app.get('/v1/Dishes', async (req, res) =>{
 })
 
 app.post('/v1/Dish-Name', (req, res) => {
-    const userInput = req.body.drink_name;
+    const userInput = req.body.dishName;
+    console.log(req.body.dishName + " is the name of the dish")
     const sqlQuery = `SELECT * FROM drinkdish.Dish WHERE dish_name = '${userInput}'`;
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');

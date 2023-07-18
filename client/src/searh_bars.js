@@ -14,6 +14,7 @@ const SearchBar = ({ onSearch }) => {
   const [dishName, setDishName] = useState('');  //dishId, setDishid
   const [drinkName, setDrinkName] = useState(''); //drinkId, setDrinkId
   const [drink, setDrink] = useState('');
+  const [dish, setDish] = useState('');
   const [drinkIngredientName, setDrinkIngredientName] = useState('');
   const [flavorPairings, setFlavorPairings] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
@@ -69,13 +70,16 @@ const SearchBar = ({ onSearch }) => {
     }
   };
 
-  const handleSearchByDishName = async (searchTerm) => {
+  const handleSearchByDishName = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/v1/Dish-Name?search=${searchTerm}`);
-      console.log('backend call works just fine now')
-      setData(response.data);
-      setIsDataFetched(true);
-      setSelectedTable('dish-name'); // Select the 'dishes' table
+      //const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
+      const response = await axios.post('http://localhost:4000/v1/Dish-Name', { dishName }); 
+      const dish = response.data[0].dish_name.toString();
+      console.log(response.data[0].dish_name.toString() + '    name of dish returned')
+     // setData();
+      //setIsDataFetched(true);
+      //setSelectedTable('dish-name'); // Select the 'dishes' table
+      setDish(dish);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -85,6 +89,7 @@ const SearchBar = ({ onSearch }) => {
     try {
       const response = await axios.get('http://localhost:4000/v1/Drink_Flavors');
       console.log('backend call works just fine now')
+      console.log(response.data)
       setData(response.data);
       setIsDataFetched(true)
       setSelectedTable('drinkFlavors'); // Select the 'drinkFlavors' table
@@ -169,6 +174,10 @@ const SearchBar = ({ onSearch }) => {
     setDrinkName(event.target.value); 
     //console.log(drinkName + " is the name of target value");
   };
+
+  const handleDishNameInputChange = (event) =>{
+    setDishName(event.target.value);
+  }
 
 
   const handleDrinkKeyPress = event => {
@@ -418,6 +427,16 @@ const SearchBar = ({ onSearch }) => {
       />
       <button onClick={handleSearchDrinkByName}>Search</button>
       <p>Drink: {drink}</p>
+    </div>
+    <div className="input-section">
+      <input
+        type="text"
+        value={dishName} 
+        onChange={handleDishNameInputChange}
+        placeholder="Enter Dish Name"
+      />
+      <button onClick={handleSearchByDishName}>Search</button>
+      <p>Dish: {dish}</p>
     </div>
     <div className="input-section">
       <form onSubmit={handleFetchByDrinkIngredient}>
