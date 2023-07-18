@@ -163,8 +163,8 @@ app.get('/v1/Dish_Category', async (req, res) =>{
     })
 })
 
-app.get('/v1/match-drink-ingredient', async (req, res) => {
-      const { drink_ingredient_name } = req.body; 
+app.post('/v1/match-drink-ingredient', (req, res) => {
+      const { drink_ingredient_name } = req.body.drinkIngredientName; 
       console.log(req.body + " req body from ingredient name");
       const sqlQuery = `
         SELECT dp.flavor_pairing_id, di.drink_ingredient_name, di.drink_ingredient_id, di.dish_ingredient_name, di.dish_ingredient_id
@@ -173,10 +173,12 @@ app.get('/v1/match-drink-ingredient', async (req, res) => {
         INNER JOIN Drink_Ingredient di2 ON dp.drink_flavor_id = di2.drink_ingredient_id
         WHERE di2.drink_ingredient_name = ?
       `;
-      db.query(sqlQuery, [drink_ingredient_id], (err, data));
-      if(err) return res.json('Error try again');
+      db.query(sqlQuery, [drink_ingredient_name], (err, data) => {
+        if(err) return res.json('Error try again');
         console.log(data);
         return res.json(data);
+      });
+      
   });
 
   app.get('/v1/match-dish-ingredient', async (req, res) => {

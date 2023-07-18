@@ -179,6 +179,10 @@ const SearchBar = ({ onSearch }) => {
     setDishName(event.target.value);
   }
 
+  const handleDrinkIngredientInputChange = (event) =>{
+    setDrinkIngredientName(event.target.value);
+  }
+
 
   const handleDrinkKeyPress = event => {
     if (event.key === 'Enter') {
@@ -219,10 +223,11 @@ const SearchBar = ({ onSearch }) => {
     }
   };
 
-  const handleFetchByDrinkIngredient = async (e) => {
-    e.preventDefault();
+  const handleFetchByDrinkIngredient = async () => {
     try {
-      const response = await axios.post('/v1/match-drink-ingredient', { drink_ingredient_name: drinkIngredientName });
+      console.log(drinkIngredientName + "  is the drink's ingredient name");
+      const response = await axios.post('http://localhost:4000/v1/match-drink-ingredient', { drinkIngredientName });
+      //'http://localhost:4000/v1/Dish-Name'
       const data = response.data;
       setFlavorPairings(data);
       console.log(data);
@@ -439,22 +444,24 @@ const SearchBar = ({ onSearch }) => {
       <p>Dish: {dish}</p>
     </div>
     <div className="input-section">
-      <form onSubmit={handleFetchByDrinkIngredient}>
         <input
           type="text"
           value={drinkIngredientName}
-          onChange={(e) => setDrinkIngredientName(e.target.value)}
+          onChange={handleDrinkIngredientInputChange}
           placeholder="Enter Drink Ingredient Name"
         />
-        <button type="submit">Search by Drink Ingredient</button>
-      </form>
-      <ul>
-        {flavorPairings.map((pairing) => (
-          <li key={pairing.flavor_pairing_id}>
-            Drink Ingredient Name: {pairing.drink_ingredient_name}, Dish Ingredient Name: {pairing.dish_ingredient_name}
-          </li>
-        ))}
-      </ul>
+        <button onClick={handleFetchByDrinkIngredient}>Search by Drink Ingredient</button>
+        <ul>
+    {Array.isArray(flavorPairings) ? (
+      flavorPairings.map((pairing) => (
+        <li key={pairing.flavor_pairing_id}>
+          Drink Ingredient Name: {pairing.drink_ingredient_name}, Dish Ingredient Name: {pairing.dish_ingredient_name}
+        </li>
+      ))
+    ) : (
+      <li>No flavor pairings found</li>
+    )}
+  </ul>
     </div>
        <div className="logo-container">
       <img src={logo} alt="Logo" />
