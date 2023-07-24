@@ -10,7 +10,9 @@ const SearchBar = ({ onSearch }) => {
   const [pairings, setPairings] = useState([]);
   const [data, setData] = useState([]);
   const [dishId, setDishId] = useState('');
+  //const [isDishFetched, setIsDishFetched] = useState(false);
   const [drinkId, setDrinkId] = useState('');
+  //const [isDrinkFetched, setIsDrinkFetched] = useState(false);
   const [dishName, setDishName] = useState('');  //dishId, setDishid
   const [drinkName, setDrinkName] = useState(''); //drinkId, setDrinkId
   const [drink, setDrink] = useState('');
@@ -20,6 +22,8 @@ const SearchBar = ({ onSearch }) => {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [searchBarWidth, setSearchBarWidth] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
+  const [dishFlavorName, setDishFlavorName] = useState('');
+  const [resultData, setResultData] = useState(null);
 
 
 
@@ -113,11 +117,13 @@ const SearchBar = ({ onSearch }) => {
   const handleDrinksForDishSearch = async () => {
     try {
       const response = await axios.post('http://localhost:4000/v1/drinks-for-dish', {
-        dish_name: 'your-dish-name', // Replace 'your-dish-name' with the actual dish name
+        dish_name: dishId, // Replace 'your-dish-name' with the actual dish name
       });
       console.log('drinks for dish works');
-      setData(response.data);
+      console.log('the returned list of drinks   ' + response.data);  //object is being returned but unable to display integers
+      setDrinkId(response.data);
       setIsDataFetched(true);
+      //setIsDrinkFetched(true);
       setSelectedTable('dishDrinksForDish'); 
     } catch (error) {
       console.error(error);
@@ -130,7 +136,8 @@ const SearchBar = ({ onSearch }) => {
         drink_ingredient: 'your-drink-ingredient', // Replace 'your-dish-name' with the actual dish name
       });
       console.log('drinks for dish works');
-      setData(response.data);
+      //setData(response.data);
+      setDishId(response.data);
       setIsDataFetched(true);
       setSelectedTable('dishDrinksForDish'); 
     } catch (error) {
@@ -154,14 +161,27 @@ const SearchBar = ({ onSearch }) => {
   const handleDishesForDrinkSearch = async () => {
     try {
       const response = await axios.post('http://localhost:4000/v1/dishes-for-drink', {
-        drink_name: 'your-dish-name', // Replace 'your-dish-name' with the actual dish name
+        drink_name: drinkId, // Replace 'your-dish-name' with the actual dish name
       });
       setData(response.data);
+      console.log("response list of dishes   "+ response.data);  //object is being returned but unable to display integers
       setIsDataFetched(true);
+      //setIsDishFetched(true);
       setSelectedTable('dishesForDrink');
 
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleFetchDishFlavor = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/v1/Dish-Flavor-Name', {
+        dishFlavorName: dishFlavorName,
+      });
+      setResultData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
  
@@ -452,16 +472,34 @@ const SearchBar = ({ onSearch }) => {
         />
         <button onClick={handleFetchByDrinkIngredient}>Search by Drink Ingredient</button>
         <ul>
-    {Array.isArray(flavorPairings) ? (
+    {Array.isArray(flavorPairings) ? ( 
       flavorPairings.map((pairing) => (
         <li key={pairing.flavor_pairing_id}>
           Drink Ingredient Name: {pairing.drink_ingredient_name}, Dish Ingredient Name: {pairing.dish_ingredient_name}
         </li>
       ))
     ) : (
-      <li>No flavor pairings found</li>
+      <li>No flavor pairings found</li> //caused due to an array not being returned, but rather json object perhaps
     )}
   </ul>
+    </div>
+    <div>
+      <input
+        type="text"
+        value={dishFlavorName}
+        onChange={(e) => setDishFlavorName(e.target.value)}
+        placeholder="Enter Dish Flavor Name"
+      />
+      <button onClick={handleFetchDishFlavor}>Search</button>
+      {resultData && (
+        <ul>
+          {resultData.map((item) => (
+            <li key={item.dish_category_name}>
+              Dish Category Name: {item.dish_category_name}, Drink Category Name: {item.drink_category_name}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
        <div className="logo-container">
       <img src={logo} alt="Logo" />

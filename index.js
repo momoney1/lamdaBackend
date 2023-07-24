@@ -145,6 +145,33 @@ app.post('/v1/Dish-Name', (req, res) => {
     })
 })
 
+app.post('/v1/Dish-Flavor-Name', (req, res) => {
+    const userInput = req.body.dishFlavorName;
+    console.log(userInput + " is the name of the dish");
+    
+    const sqlQuery = `
+        SELECT
+            dc.dish_category_name AS dish_category_name,
+            dr.drink_category_name AS drink_category_name
+        FROM
+            drinkdish.Dish_Flavor df
+        INNER JOIN drinkdish.Category_Pairing cp ON df.dish_flavor_id = cp.dish_category_id
+        INNER JOIN drinkdish.Dish_Category dc ON cp.dish_category_id = dc.dish_category_id
+        INNER JOIN drinkdish.Drink_Category dr ON cp.drink_category_id = dr.drink_category_id
+        WHERE
+            df.dish_flavor_name = ?;
+    `;
+
+    db.query(sqlQuery, [userInput], (err, data) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            return res.json('Error try again');
+        }
+        console.log(data);
+        return res.json(data);
+    });
+});
+
 app.get('/v1/Drink_Flavors', async (req, res) =>{
     const sqlQuery = 'SELECT * FROM drinkdish.Drink_Flavor';
     db.query(sqlQuery, (err, data) =>{
@@ -168,9 +195,9 @@ app.post('/v1/match-drink-ingredient', (req, res) => {
       console.log(req.body + " req body from ingredient name");
       const sqlQuery = `
         SELECT dp.flavor_pairing_id, di.drink_ingredient_name, di.drink_ingredient_id, di.dish_ingredient_name, di.dish_ingredient_id
-        FROM Flavor_Pairing dp
-        INNER JOIN Dish_Ingredient di ON dp.dish_flavor_id = di.dish_ingredient_id
-        INNER JOIN Drink_Ingredient di2 ON dp.drink_flavor_id = di2.drink_ingredient_id
+        FROM drinkdish.Flavor_Pairing dp
+        INNER JOIN drinkdish.Dish_Ingredient di ON dp.dish_flavor_id = di.dish_ingredient_id
+        INNER JOIN drinkdish.Drink_Ingredient di2 ON dp.drink_flavor_id = di2.drink_ingredient_id
         WHERE di2.drink_ingredient_name = ?
       `;
       db.query(sqlQuery, [drink_ingredient_name], (err, data) => {
@@ -185,9 +212,9 @@ app.post('/v1/match-drink-ingredient', (req, res) => {
     const { dish_ingredient_name } = req.body; 
     const sqlQuery = `
       SELECT dp.flavor_pairing_id, di.drink_ingredient_name, di.drink_ingredient_id, di.dish_ingredient_name, di.dish_ingredient_id
-      FROM Flavor_Pairing dp
-      INNER JOIN Dish_Ingredient di ON dp.dish_flavor_id = di.dish_ingredient_id
-      INNER JOIN Drink_Ingredient di2 ON dp.drink_flavor_id = di2.drink_ingredient_id
+      FROM drinkdish.Flavor_Pairing dp
+      INNER JOIN drinkdish.Dish_Ingredient di ON dp.dish_flavor_id = di.dish_ingredient_id
+      INNER JOIN drinkdish.Drink_Ingredient di2 ON dp.drink_flavor_id = di2.drink_ingredient_id
       WHERE di2.dish_ingredient_name = ?
     `;
     db.query(sqlQuery, [dish_ingredient_id], (err, data));
@@ -207,18 +234,18 @@ app.get('/v1/flavor-pairings', async (req, res) => {
 
 app.post('/v1/drinks-for-dish', async (req, res) => {
     const userInput = req.body.dish_name;
-    const sqlQuery = `SELECT * FROM drinkdish.Flavor_Pairing WHERE dish_flavor_id = '${userInput}'`;
+    const sqlQuery = `SELECT drink_flavor_id FROM drinkdish.Flavor_Pairing WHERE dish_flavor_id = '${userInput}'`;
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
         console.log(data);
-        console.log(req.body.dish_name + "    dish name ");
+        console.log(userInput + "    dish name ");
         return res.json(data);
     })
 })
 
 app.post('/v1/dishes-for-drink', (req, res) => {
     const userInput = req.body.drink_name;
-    const sqlQuery = `SELECT * FROM drinkdish.Flavor_Pairing WHERE drink_flavor_id = '${userInput}'`;
+    const sqlQuery = `SELECT dish_flavor_id FROM drinkdish.Flavor_Pairing WHERE drink_flavor_id = '${userInput}'`;
     db.query(sqlQuery, (err, data) =>{
         if(err) return res.json('Error try again');
         console.log(data);
