@@ -223,6 +223,28 @@ app.post('/v1/match-drink-ingredient', (req, res) => {
       return res.json(data);
 }); 
 
+app.post('/v1/rating', (req, res) => {
+    const { user_rating, user_id, ingredient_pairing, rating } = req.body;
+  
+    // Assuming you have set up a database connection named 'db' to perform queries
+    const sqlQuery = `
+      INSERT INTO drinkdish.User_Rating (user_rating, user_id, ingredient_pairing, rating)
+      VALUES (?, ?, ?, ?)
+    `;
+  
+    // Assuming you have configured the database query to handle prepared statements or use an ORM
+    db.query(sqlQuery, [user_rating, user_id, ingredient_pairing, rating], (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err);
+        return res.status(500).json('Error inserting data');
+      }
+  
+      // Successful insert
+      return res.status(200).json('Rating inserted successfully');
+    });
+  });
+
+  
 app.get('/v1/flavor-pairings', async (req, res) => {
     const sqlQuery = 'SELECT * FROM drinkdish.Flavor_Pairing';
     db.query(sqlQuery, (err, data) =>{

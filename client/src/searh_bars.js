@@ -24,6 +24,10 @@ const SearchBar = ({ onSearch }) => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [dishFlavorName, setDishFlavorName] = useState('');
   const [resultData, setResultData] = useState(null);
+  const [userRating, setUserRating] = useState('');
+  const [userId, setUserId] = useState('');
+  const [ingredientPairing, setIngredientPairing] = useState('');
+  const [rating, setRating] = useState('');
 
 
 
@@ -185,6 +189,23 @@ const SearchBar = ({ onSearch }) => {
     }
   };
  
+
+  const handleUserRatingSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await axios.post('/v1/rating', {
+        user_rating: userRating,
+        user_id: userId,
+        ingredient_pairing: ingredientPairing,
+        rating: rating,
+      });
+
+      console.log(response.data); // Display the response from the server
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+    }
+  };
 
   const handleDrinkInputChange = (event) => {
     setDrinkId(event.target.value);  //setDrinkId
@@ -500,6 +521,27 @@ const SearchBar = ({ onSearch }) => {
           ))}
         </ul>
       )}
+    </div>
+    <div>
+    <form onSubmit={handleUserRatingSubmit}>
+      <div>
+        <label>User Rating:</label>
+        <input type="text" value={userRating} onChange={(e) => setUserRating(e.target.value)} />
+      </div>
+      <div>
+        <label>User ID:</label>
+        <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
+      </div>
+      <div>
+        <label>Ingredient Pairing:</label>
+        <input type="text" value={ingredientPairing} onChange={(e) => setIngredientPairing(e.target.value)} />
+      </div>
+      <div>
+        <label>Rating:</label>
+        <input type="text" value={rating} onChange={(e) => setRating(e.target.value)} />
+      </div>
+      <button type="submit">Submit Rating</button>
+    </form>
     </div>
        <div className="logo-container">
       <img src={logo} alt="Logo" />
