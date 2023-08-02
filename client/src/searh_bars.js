@@ -58,9 +58,11 @@ const SearchBar = ({ onSearch }) => {
   const handleSearchDrinkByName = async () => {
     try {
       const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
+      console.log(response.data[0].drink_name + ": "+response.data[0].drink_description );
       const drink = response.data[0].drink_name;
+      const drinkDescription = response.data[0].drink_description;
       console.log(drink.toString() + " is the searched drink");
-      setDrink(drink.toString());
+      setDrink(drink.toString() + ": "+ drinkDescription);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -83,11 +85,13 @@ const SearchBar = ({ onSearch }) => {
       //const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
       const response = await axios.post('http://localhost:4000/v1/Dish-Name', { dishName }); 
       const dish = response.data[0].dish_name.toString();
+      const dishDescription = response.data[0].dish_description.toString();
+      const dishFlavors = response.data[0].flavor.toString();
       console.log(response.data[0].dish_name.toString() + '    name of dish returned')
      // setData();
       //setIsDataFetched(true);
       //setSelectedTable('dish-name'); // Select the 'dishes' table
-      setDish(dish);
+      setDish(dish + ": "+ dishDescription + ":  It is comprised of the following flavors: "+ dishFlavors);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
