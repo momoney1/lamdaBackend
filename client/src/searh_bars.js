@@ -29,6 +29,9 @@ const SearchBar = ({ onSearch }) => {
   const [ingredientPairing, setIngredientPairing] = useState('');
   const [rating, setRating] = useState('');
 
+  const [dishToDrinkName, setDishToDrinkName] = useState('');
+  const [result, setResult] = useState([]);
+
 
 
   const handleSearch = async () => {
@@ -188,6 +191,17 @@ const SearchBar = ({ onSearch }) => {
         dishFlavorName: dishFlavorName,
       });
       setResultData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const handleDishToDrinkSearch = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/v1/Dish-To-Drink-Pairing', { dishToDrinkName });
+      console.log(response.data);
+      setResult(response.data);
+      setIsDataFetched(true);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -546,6 +560,20 @@ const SearchBar = ({ onSearch }) => {
       </div>
       <button type="submit">Submit Rating</button>
     </form>
+    </div>
+    <div>
+      <input
+        type="text"
+        value={dishToDrinkName}
+        onChange={(e) => setDishToDrinkName(e.target.value)}
+        placeholder="Enter Dish Name"
+      />
+      <button onClick={handleDishToDrinkSearch}>Search</button>
+      <ul>
+        {result.map((drink, index) => (
+          <li key={index}>{drink.drink_name}</li>
+        ))}
+      </ul>
     </div>
        <div className="logo-container">
       <img src={logo} alt="Logo" />

@@ -172,6 +172,29 @@ app.post('/v1/Dish-Flavor-Name', (req, res) => {
     });
 });
 
+app.post('/v1/Dish-To-Drink-Pairing', (req, res) => {
+    const userInput = req.body.dishToDrinkName;
+    console.log(userInput + " is the name of the dish");
+    
+    const sqlQuery = `
+        SELECT d.drink_name
+        FROM drinkdish.Drink d
+        JOIN drinkdish.DishToDrinkMapping dtm ON d.drink_id = dtm.drink_id
+        JOIN drinkdish.Dish_Flavor df ON dtm.dish_id = df.dish_flavor_id
+        JOIN drinkdish.Dish di ON df.dish_flavor_id = di.dish_id
+        WHERE di.dish_name = ?;
+    `;
+
+    db.query(sqlQuery, [userInput], (err, data) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            return res.json('Error try again');
+        }
+        console.log(data);
+        return res.json(data);
+    });
+});
+
 app.get('/v1/Drink_Flavors', async (req, res) =>{
     const sqlQuery = 'SELECT * FROM drinkdish.Drink_Flavor';
     db.query(sqlQuery, (err, data) =>{
@@ -244,7 +267,7 @@ app.post('/v1/rating', (req, res) => {
     });
   });
 
-  
+
 app.get('/v1/flavor-pairings', async (req, res) => {
     const sqlQuery = 'SELECT * FROM drinkdish.Flavor_Pairing';
     db.query(sqlQuery, (err, data) =>{
