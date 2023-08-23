@@ -91,7 +91,18 @@ const App = () => {
 
   
   
-    const handleRegister = async (username, password) => {
+    const handleRegister = async (username, password) => { //encrpyt password
+
+      const lowercasedPassword = password.toLowerCase();
+
+      // Check if password is already lowercase
+      if (password !== lowercasedPassword) {
+          const errorMessage = 'Password must be lowercase. Please try again.';
+          window.prompt(errorMessage);
+          // Handle error, e.g., show an error message to the user
+          return;
+      }
+      
       try {
         await axios.post('http://localhost:4000/register', { username, password });
         console.log('User registered successfully');

@@ -6,7 +6,6 @@ const mySql = require('mysql');
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const registrationService = require('./backend_services/mySQLConnect');
-//const loginService = require('./backend_services/login');
 const validationService = require('./backend_services/validate');
 const util = require('./backend_services/Utility/utility');
 const dbConection = require('./backend_services/mySQLConnect');
@@ -49,7 +48,6 @@ app.get('/', (req, res) =>{
 app.get('/message', (req, res) => {
     res.json({ message: "Hello Mr Moe from message endpoint!" });
     console.log('hello Mr Moe from server');
-    //mylamda.invoke(params).promise();
 });
 
 const db =  mySql2.createConnection({
@@ -64,7 +62,6 @@ console.log('connected         from index js');
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
   
-    // Validate the request body
     if (!username || !password) {
       return res.status(400).json({ message: 'Username and password are required' });
     }
@@ -82,13 +79,10 @@ app.post('/register', (req, res) => {
 
   app.post('/login', (req, res) => {
     const { username, password } = req.body;
-  
-    // Validate the request body
-    if (!username || !password) {
+      if (!username || !password) {
       return res.status(400).json({ message: 'Username and password are required' });
     }
   
-    // Check if the username and password match the records in the database
     const query = 'SELECT * FROM User WHERE username = ? AND password = ?';
     db.query(query, [username, password], (error, results) => {
       if (error) {
@@ -104,7 +98,6 @@ app.post('/register', (req, res) => {
     });
   });
 
-// test version of function, only retrieve first 10 rows:  /'SELECT * FROM drinkdish.Drink WHERE drink_id < 11
 app.get('/v1/Drinks', async (req, res) =>{
     const sqlQuery = 'SELECT * FROM drinkdish.Drink';   
     db.query(sqlQuery, (err, data) =>{
@@ -116,13 +109,16 @@ app.get('/v1/Drinks', async (req, res) =>{
 
 app.post('/v1/Drink-Name', (req, res) => {
     const userInput = req.body.drinkName;
-    const sqlQuery = `SELECT * FROM drinkdish.Drink WHERE drink_name = '${userInput}'`;
-    db.query(sqlQuery, (err, data) =>{
-        if(err) return res.json('Error try again');
+    const sqlQuery = 'SELECT * FROM drinkdish.Drink WHERE drink_name = ?';
+    db.query(sqlQuery, [userInput], (err, data) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            return res.json('Error try again');
+        }
         console.log(req.body.drinkName, " backend data body");
         console.log('Returned data:', data);
         return res.json(data);
-    })
+    });
 })
 
 app.get('/v1/Dishes', async (req, res) =>{
@@ -137,12 +133,15 @@ app.get('/v1/Dishes', async (req, res) =>{
 app.post('/v1/Dish-Name', (req, res) => {
     const userInput = req.body.dishName;
     console.log(req.body.dishName + " is the name of the dish")
-    const sqlQuery = `SELECT * FROM drinkdish.Dish WHERE dish_name = '${userInput}'`;
-    db.query(sqlQuery, (err, data) =>{
-        if(err) return res.json('Error try again');
+    const sqlQuery = 'SELECT * FROM drinkdish.Dish WHERE dish_name = ?';
+    db.query(sqlQuery, [userInput], (err, data) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            return res.json('Error try again');
+        }
         console.log(data);
         return res.json(data);
-    })
+    });
 })
 
 app.post('/v1/Dish-Flavor-Name', (req, res) => {
@@ -248,22 +247,17 @@ app.post('/v1/match-drink-ingredient', (req, res) => {
 
 app.post('/v1/rating', (req, res) => {
     const { user_rating, user_id, ingredient_pairing, rating } = req.body;
-  
-    // Assuming you have set up a database connection named 'db' to perform queries
     const sqlQuery = `
       INSERT INTO drinkdish.User_Rating (user_rating, user_id, ingredient_pairing, rating)
       VALUES (?, ?, ?, ?)
     `;
   
-    // Assuming you have configured the database query to handle prepared statements or use an ORM
     db.query(sqlQuery, [user_rating, user_id, ingredient_pairing, rating], (err, result) => {
       if (err) {
         console.error('Error inserting data:', err);
         return res.status(500).json('Error inserting data');
       }
-  
-      // Successful insert
-      return res.status(200).json('Rating inserted successfully');
+        return res.status(200).json('Rating inserted successfully');
     });
   });
 
@@ -279,25 +273,30 @@ app.get('/v1/flavor-pairings', async (req, res) => {
 
 app.post('/v1/drinks-for-dish', async (req, res) => {
     const userInput = req.body.dish_name;
-    const sqlQuery = `SELECT drink_flavor_id FROM drinkdish.Flavor_Pairing WHERE dish_flavor_id = '${userInput}'`;
-    db.query(sqlQuery, (err, data) =>{
-        if(err) return res.json('Error try again');
+    const sqlQuery = 'SELECT drink_flavor_id FROM drinkdish.Flavor_Pairing WHERE dish_flavor_id = = ?';
+    db.query(sqlQuery, [userInput], (err, data) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            return res.json('Error try again');
+        }
         console.log(data);
         console.log(userInput + "    dish name ");
         return res.json(data);
-    })
+    });
 })
 
 app.post('/v1/dishes-for-drink', (req, res) => {
     const userInput = req.body.drink_name;
-    const sqlQuery = `SELECT dish_flavor_id FROM drinkdish.Flavor_Pairing WHERE drink_flavor_id = '${userInput}'`;
-    db.query(sqlQuery, (err, data) =>{
-        if(err) return res.json('Error try again');
+    const sqlQuery = 'SELECT dish_flavor_id FROM drinkdish.Flavor_Pairing WHERE drink_flavor_id = ?';;
+    db.query(sqlQuery, [userInput], (err, data) => {
+        if (err) {
+            console.error('Error fetching data:', err);
+            return res.json('Error try again');
+        }
         console.log(data);
         return res.json(data);
-    })
+    });
 })
-
 
 app.get('/v1/admin/users', (req, res) => {
     const sqlQuery = 'SELECT * FROM drinkdish.User';
@@ -316,7 +315,6 @@ app.listen(4000, () => {
 
 exports.handler = async (event, context, callback) => {
     console.log("Processing...");
-    //console.log("here is the first index value in event. "+ event["key1"]);
     const params = {
         Item: {
             date: Date.now(),
@@ -335,11 +333,3 @@ exports.handler = async (event, context, callback) => {
     console.log(response);
 
 };
-
-/* docClient.put(params, function(err, data) {
-        if(err){
-            callback(err, null);
-        } else {
-            callback(null, data);
-        }
-    })*/

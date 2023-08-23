@@ -13,8 +13,8 @@ const SearchBar = ({ onSearch }) => {
   //const [isDishFetched, setIsDishFetched] = useState(false);
   const [drinkId, setDrinkId] = useState('');
   //const [isDrinkFetched, setIsDrinkFetched] = useState(false);
-  const [dishName, setDishName] = useState('');  //dishId, setDishid
-  const [drinkName, setDrinkName] = useState(''); //drinkId, setDrinkId
+  const [dishName, setDishName] = useState('');  
+  const [drinkName, setDrinkName] = useState(''); 
   const [drink, setDrink] = useState('');
   const [dish, setDish] = useState('');
   const [drinkIngredientName, setDrinkIngredientName] = useState('');
@@ -60,6 +60,12 @@ const SearchBar = ({ onSearch }) => {
  
   const handleSearchDrinkByName = async () => {
     try {
+
+      if (/[^A-Za-z\s]/.test(drinkName)) {
+        const errorMessage = 'Drink name can only contain alphabetic letters and spaces.';
+        window.alert(errorMessage);
+        return;
+    }
       const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
       console.log(response.data[0].drink_name + ": "+response.data[0].drink_description );
       const drink = response.data[0].drink_name;
@@ -85,6 +91,12 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearchByDishName = async () => {
     try {
+
+      if (/[^A-Za-z\s]/.test(dishName)) {
+        const errorMessage = 'Dish name can only contain alphabetic letters and spaces.';
+        window.alert(errorMessage);
+        return;
+    }
       //const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
       const response = await axios.post('http://localhost:4000/v1/Dish-Name', { dishName }); 
       const dish = response.data[0].dish_name.toString();
@@ -170,6 +182,13 @@ const SearchBar = ({ onSearch }) => {
   };
 
   const handleDishesForDrinkSearch = async () => {
+
+    if (!/^\d+$/.test(drinkId)) {
+      const errorMessage = 'Drink ID should only contain numeric values.';
+      window.alert(errorMessage);
+      return;
+  }
+
     try {
       const response = await axios.post('http://localhost:4000/v1/dishes-for-drink', {
         drink_name: drinkId, // Replace 'your-dish-name' with the actual dish name
@@ -186,6 +205,13 @@ const SearchBar = ({ onSearch }) => {
   };
 
   const handleFetchDishFlavor = async () => {
+    
+    if (/[^A-Za-z\s]/.test(dishFlavorName)) {
+      const errorMessage = 'Dish flavor can only contain alphabetic letters and spaces.';
+      window.alert(errorMessage);
+      return;
+  }
+
     try {
       const response = await axios.post('http://localhost:4000/v1/Dish-Flavor-Name', {
         dishFlavorName: dishFlavorName,
@@ -197,6 +223,13 @@ const SearchBar = ({ onSearch }) => {
   };
 
   const handleDishToDrinkSearch = async () => {
+
+    if (/[^A-Za-z\s]/.test(dishToDrinkName)) {
+      const errorMessage = 'Dish name can only contain alphabetic letters and spaces.';
+      window.alert(errorMessage);
+      return;
+  }
+
     try {
       const response = await axios.post('http://localhost:4000/v1/Dish-To-Drink-Pairing', { dishToDrinkName });
       console.log(response.data);
@@ -284,6 +317,11 @@ const SearchBar = ({ onSearch }) => {
 
   const handleFetchByDrinkIngredient = async () => {
     try {
+      if (/[^A-Za-z\s]/.test(drinkIngredientName)) {
+        const errorMessage = 'Drink ingredient can only contain alphabetic letters and spaces.';
+        window.alert(errorMessage);
+        return;
+    }
       console.log(drinkIngredientName + "  is the drink's ingredient name");
       const response = await axios.post('http://localhost:4000/v1/match-drink-ingredient', { drinkIngredientName });
       //'http://localhost:4000/v1/Dish-Name'
