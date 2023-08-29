@@ -32,6 +32,7 @@ const SearchBar = ({ onSearch }) => {
   const [dishToDrinkName, setDishToDrinkName] = useState('');
   const [result, setResult] = useState([]);
 
+  const urlPrefix = 'http://localhost:4000'
 
 
   const handleSearch = async () => {
@@ -46,7 +47,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearchDrinks = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/v1/Drinks');
+      const response = await axios.get(urlPrefix + '/v1/Drinks');
       console.log('backend call works just fine now')
       console.log(response.data)
       setData(response.data);
@@ -66,7 +67,7 @@ const SearchBar = ({ onSearch }) => {
         window.alert(errorMessage);
         return;
     }
-      const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
+      const response = await axios.post(urlPrefix + '/v1/Drink-Name', { drinkName }); 
       console.log(response.data[0].drink_name + ": "+response.data[0].drink_description );
       const drink = response.data[0].drink_name;
       const drinkDescription = response.data[0].drink_description;
@@ -79,7 +80,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearchDishes = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/v1/Dishes');
+      const response = await axios.get(urlPrefix + '/v1/Dishes');
       console.log('backend call works just fine now')
       setData(response.data);
       setIsDataFetched(true);
@@ -98,7 +99,7 @@ const SearchBar = ({ onSearch }) => {
         return;
     }
       //const response = await axios.post('http://localhost:4000/v1/Drink-Name', { drinkName }); 
-      const response = await axios.post('http://localhost:4000/v1/Dish-Name', { dishName }); 
+      const response = await axios.post(urlPrefix + '/v1/Dish-Name', { dishName }); 
       const dish = response.data[0].dish_name.toString();
       const dishDescription = response.data[0].dish_description.toString();
       const dishFlavors = response.data[0].flavor.toString();
@@ -114,7 +115,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearchDrinkFlavors = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/v1/Drink_Flavors');
+      const response = await axios.get(urlPrefix + '/v1/Drink_Flavors');
       console.log('backend call works just fine now')
       console.log(response.data)
       setData(response.data);
@@ -127,7 +128,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearchDishCategories = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/v1/Dish_Category');
+      const response = await axios.get(urlPrefix + '/v1/Dish_Category');
       console.log('backend call works just fine now')
       setData(response.data);
       setIsDataFetched(true)
@@ -139,7 +140,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleDrinksForDishSearch = async () => {
     try {
-      const response = await axios.post('http://localhost:4000/v1/drinks-for-dish', {
+      const response = await axios.post(urlPrefix + '/v1/drinks-for-dish', {
         dish_name: dishId, // Replace 'your-dish-name' with the actual dish name
       });
       console.log('drinks for dish works');
@@ -155,7 +156,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleByDrinkIngredient = async () => {
     try {
-      const response = await axios.post('http://localhost:4000/v1/drinks-for-dish', {
+      const response = await axios.post(urlPrefix + '/v1/drinks-for-dish', {
         drink_ingredient: 'your-drink-ingredient', // Replace 'your-dish-name' with the actual dish name
       });
       console.log('drinks for dish works');
@@ -190,7 +191,7 @@ const SearchBar = ({ onSearch }) => {
   }
 
     try {
-      const response = await axios.post('http://localhost:4000/v1/dishes-for-drink', {
+      const response = await axios.post(urlPrefix + '/v1/dishes-for-drink', {
         drink_name: drinkId, // Replace 'your-dish-name' with the actual dish name
       });
       setData(response.data);
@@ -213,7 +214,7 @@ const SearchBar = ({ onSearch }) => {
   }
 
     try {
-      const response = await axios.post('http://localhost:4000/v1/Dish-Flavor-Name', {
+      const response = await axios.post(urlPrefix + '/v1/Dish-Flavor-Name', {
         dishFlavorName: dishFlavorName,
       });
       setResultData(response.data);
@@ -231,7 +232,7 @@ const SearchBar = ({ onSearch }) => {
   }
 
     try {
-      const response = await axios.post('http://localhost:4000/v1/Dish-To-Drink-Pairing', { dishToDrinkName });
+      const response = await axios.post(urlPrefix + '/v1/Dish-To-Drink-Pairing', { dishToDrinkName });
       console.log(response.data);
       setResult(response.data);
       setIsDataFetched(true);
@@ -245,7 +246,7 @@ const SearchBar = ({ onSearch }) => {
     e.preventDefault();
     
     try {
-      const response = await axios.post('/v1/rating', {
+      const response = await axios.post(urlPrefix + '/v1/rating', {
         user_rating: userRating,
         user_id: userId,
         ingredient_pairing: ingredientPairing,
